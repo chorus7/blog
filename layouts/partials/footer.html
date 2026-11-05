@@ -1,3 +1,29 @@
 <div class="footer-info">
-	{{ now.Format "2006" }}© {{ .Site.Title }}
+	<span class="footer-left">{{ now.Format "2006" }}© {{ .Site.Title }}</span>
+	{{- with .Site.Params.douyin }}
+	<span class="footer-sep">·</span>
+	<a class="footer-douyin" href="{{ . }}" target="_blank" rel="noopener noreferrer me">抖音</a>
+	{{- end }}
+	{{- with .Site.Params.startDate }}
+	{{- $start := time.AsTime . }}
+	{{- $days := int (div (sub now.Unix $start.Unix) 86400) }}
+	{{- if lt $days 0 }}{{ $days = 0 }}{{ end }}
+	<span class="footer-sep">·</span>
+	<span class="footer-uptime">本站已运行 <span id="uptime-days">{{ $days }}</span> 天</span>
+	{{- end }}
 </div>
+{{- with .Site.Params.startDate }}
+<script>
+(function(){
+  var start = {{ (time.AsTime .).Unix }} * 1000;
+  function tick(){
+    var d = Math.floor((Date.now() - start) / 86400000);
+    if (d < 0) d = 0;
+    var el = document.getElementById("uptime-days");
+    if (el) el.textContent = d;
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+</script>
+{{- end }}

@@ -10,6 +10,18 @@ paginatePath = "page"
 [params]
   author = "chorus7"
   description = "个人随记"
+
+  # ===== 页脚 =====
+  # 建站日期（运行时长从这里算起），格式 YYYY-MM-DD
+  startDate = "2026-11-05"
+  # 抖音主页，填完整链接；留空则页脚不显示抖音入口
+  douyin = ""
+
+  # ===== 浏览器标签标题 =====
+  # 首页标题
+  titleHome = "二〇二六 | 个人博客"
+  # 内页标题（文章、列表、分类等）
+  titleInner = "个人博客 | 随记"
   # 原站 nav 四项，顺序不变
   [params.nav]
     home = "Home"
