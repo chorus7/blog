@@ -15,7 +15,7 @@ paginatePath = "page"
   # 建站日期（运行时长从这里算起），格式 YYYY-MM-DD
   startDate = "2026-11-05"
   # 抖音主页，填完整链接；留空则页脚不显示抖音入口
-  douyin = ""
+  douyin = "https://www.douyin.com/user/MS4wLjABAAAAmTEMeML1Ez8WpGaeHEaCzGn0fpm6dRigVD1iM8j1Z1Y"
 
   # ===== 浏览器标签标题 =====
   # 首页标题
