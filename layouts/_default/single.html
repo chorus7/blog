@@ -1,0 +1,24 @@
+{{ define "main" }}
+				<article class="post">
+				<div class="title">
+					<h1 class="title">{{ .Title }}</h1>
+					<div class="meta">
+						{{ .Date.Format "2006年1月2日" }}  ⋮  共{{ .Content | plainify | strings.RuneCount }}字{{ with .Params.categories }}  ⋮  <span class="tags">{{ range . }}<a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}</span>{{ end }}
+					</div>
+				</div>
+				<section class="body">
+					{{ .Content }}
+				</section>
+				<div class="postnav">
+					{{- with .PrevInSection }}
+					<span class="prev_post"><a class="prev" href="{{ .RelPermalink }}">← {{ .Title }}</a></span>
+					{{- end }}
+					{{- with .NextInSection }}
+					<span class="next_post"><a class="next" href="{{ .RelPermalink }}">{{ .Title }} →</a></span>
+					{{- end }}
+				</div>
+				<div class="post-comments">
+					<div id="tcomment"></div>
+				</div>
+				</article>
+{{ end }}

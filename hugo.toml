@@ -1,0 +1,33 @@
+locale = "zh-CN"
+# 站点配置 · 视觉照抄 juroku.net，内容为自己的
+baseURL = "https://chorus7.github.io/blog/"
+title = "All in"
+
+# 一天可发多篇，slug 精确到分钟
+paginate = 10
+paginatePath = "page"
+
+[params]
+  author = "chorus7"
+  description = "个人随记"
+  # 原站 nav 四项，顺序不变
+  [params.nav]
+    home = "Home"
+    archives = "Archives"
+    about = "About"
+    links = "Links"
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      # 允许 <div class="note"> <div class="polaroid"> 这类自定义 HTML
+      unsafe = true
+  [markup.highlight]
+    noClasses = false
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"

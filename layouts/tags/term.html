@@ -1,0 +1,7 @@
+{{ define "main" }}
+	<ul class="article-list">
+		{{- range .Pages }}
+		<li><span class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span> <span class="post-date">{{ .Date.Format "2006-01-02" }}</span></li>
+		{{- end }}
+	</ul>
+{{ end }}

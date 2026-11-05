@@ -1,0 +1,24 @@
+{{ define "main" }}
+	{{ $pages := .Pages }}
+	{{ if .IsHome }}{{ $pages = where .Site.RegularPages "Section" "posts" }}{{ end }}
+	{{- range (.Paginate $pages).Pages }}
+				<section class="list-item">
+					<div class="post-container">
+						<div class="post-content">
+							<h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+							<div class="meta">
+								{{ .Date.Format "2006年1月2日" }}{{ if .Params.categories }}  ⋮ 
+								{{- range .Params.categories }}<a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}{{ end }}
+							</div>
+							{{- if .Params.summary }}
+							<div class="summary">{{ .Params.summary | markdownify }}</div>
+							{{- else }}
+							<div class="summary">{{ .Summary }}</div>
+							{{- end }}
+							<a href="{{ .RelPermalink }}" class="readmore">Read More</a>
+						</div>
+					</div>
+				</section>
+	{{- end }}
+	{{ partial "pagination.html" . }}
+{{ end }}

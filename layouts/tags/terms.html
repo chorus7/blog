@@ -1,0 +1,7 @@
+{{ define "main" }}
+	<div class="tag-cloud">
+		{{- range .Site.Taxonomies.tags }}
+		<a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+		{{- end }}
+	</div>
+{{ end }}

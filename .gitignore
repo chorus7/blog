@@ -1,0 +1,10 @@
+public/
+resources/
+.hugo_build.lock
+
+# 不提交本地密钥与同步状态
+output/notion-sync/notion.env
+.notion-state.json
+__pycache__/
+scripts/notion.env
+scripts/.notion-state.json

@@ -1,0 +1,7 @@
+{{ define "main" }}
+	<div class="category-item">
+		{{- range .Site.Taxonomies.categories }}
+		<a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+		{{- end }}
+	</div>
+{{ end }}

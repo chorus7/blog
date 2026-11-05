@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
+	{{- with .Description }}
+	<meta name="description" content="{{ . }}">
+	{{- end }}
+	<link rel="icon" href="{{ "img/favicon.png" | relURL }}" type="image/png" />
+	<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | relURL }}" title="{{ .Site.Title }}" />
+	{{- $css := resources.Get "css/main.css" | minify | fingerprint }}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ $css.RelPermalink }}" />
+</head>
+	<body>
+		<div class="content">
+			{{ partial "header.html" . }}
+			<main class="{{ if .IsHome }}list{{ else if eq .Kind "page" }}single{{ else }}list{{ end }}">
+				{{ block "main" . }}{{ end }}
+			</main>
+			{{ partial "footer.html" . }}
+		</div>
+		{{ block "scripts" . }}{{ end }}
+	</body>
+</html>
