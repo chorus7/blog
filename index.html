@@ -3,105 +3,196 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>All in — 设计原型</title>
+<title>All in</title>
 <link rel="stylesheet" href="wenkai.css">
-<link rel="stylesheet" href="prototype.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-<a class="skip" href="#main">跳到正文</a>
+<a class="skip" href="#main">跳到内容</a>
 
-<div class="wrap">
-  <header class="site-head">
-    <a class="wordmark" href="#">All in
-      <span class="wordmark-sub">致 郁 系</span>
-    </a>
-    <nav class="nav" aria-label="主导航">
-      <a href="#" aria-current="page">首页</a>
-      <a href="#">归档</a>
-      <a href="#">关于</a>
-      <a href="#">友链</a>
-    </nav>
+<div class="progress-track" aria-hidden="true"><div class="progress-fill" id="pfill"></div></div>
+
+<div class="shell">
+
+  <header class="masthead">
+    <div class="masthead-line">
+      <div>
+        <a class="brand" href="#">All in<span class="brand-mark">致郁系</span></a>
+      </div>
+      <div class="clock" id="clock">
+        <strong>22:00</strong>
+        2026年11月6日 · 周五
+      </div>
+    </div>
   </header>
 
-  <main id="main" class="timeline">
+  <nav class="nav" aria-label="主导航">
+    <a href="#" aria-current="page">年谱</a>
+    <a href="#">归档</a>
+    <a href="#">关于</a>
+    <a href="#">友链</a>
+  </nav>
 
-    <h2 class="year-head">2026 <span class="year-count">1 篇</span></h2>
+  <main id="main" class="chronicle">
 
-    <article class="entry">
-      <time class="entry-date" datetime="2026-11-05">11·05</time>
-      <div>
-        <h3 class="entry-title"><a href="#">中州第一篇：同步验证</a></h3>
-        <p class="entry-meta"><span class="tag">日常</span>共 65 字</p>
-        <p class="entry-teaser">这是一条用于验证 Notion → Hugo 同步链路的测试数据。如果能在生成的 md 里看到这段话，说明正文列通道工作正常。</p>
+    <section class="year">
+      <div class="year-figure">
+        2026
+        <span class="year-count">1 篇</span>
       </div>
-    </article>
-
-    <h2 class="year-head">2025 <span class="year-count">13 篇</span></h2>
-
-    <article class="entry">
-      <time class="entry-date" datetime="2025-07-18">07·18</time>
-      <div>
-        <h3 class="entry-title"><a href="#">暑假开始，娃去了云南贵州浙江</a></h3>
-        <p class="entry-meta"><span class="tag">碎碎念</span><span class="tag">游记</span><span class="tag">游戏</span>共 543 字</p>
-        <p class="entry-teaser">上周娃放暑假，按照往年惯例要跟我爸妈去旅行啦。暂时计划是云南-贵州-浙江，具体就看我爸妈的心情，毕竟我也没机会参与。然后留在家里的两人就开启了孤寡中年人生活。</p>
+      <div class="year-body">
+        <article class="entry" data-read-key="20261105-40f734">
+          <h3><span class="read-dot" aria-hidden="true"></span><a href="post.html">中州第一篇：同步验证</a></h3>
+          <p class="entry-foot">
+            11月5日<span class="sep">／</span>日常<span class="sep">／</span>65 字<span class="entry-len" style="--len:4"></span>
+          </p>
+        </article>
       </div>
-    </article>
+    </section>
 
-    <article class="entry">
-      <time class="entry-date" datetime="2025-07-05">07·05</time>
-      <div>
-        <h3 class="entry-title"><a href="#">出差回来，晚饭都没吃就睡了</a></h3>
-        <p class="entry-meta"><span class="tag">出差</span><span class="tag">记录</span>共 312 字</p>
-        <p class="entry-teaser">连着跑了三个现场，回到酒店鞋都不想脱。第二天在高铁上睡了一路，醒来发现坐过站。</p>
+    <section class="year">
+      <div class="year-figure">
+        2025
+        <span class="year-count">3 篇</span>
       </div>
-    </article>
-
-    <article class="entry">
-      <time class="entry-date" datetime="2025-06-22">06·22</time>
-      <div>
-        <h3 class="entry-title"><a href="#">买了三样东西，两样后悔</a></h3>
-        <p class="entry-meta"><span class="tag">买买买</span>共 428 字</p>
-        <p class="entry-teaser">第一样是那个号称能自动收线的充电器，用了两天发现线是收进去了，接口裂了。</p>
+      <div class="year-body">
+        <article class="entry" data-read-key="demo-a">
+          <h3><span class="read-dot" aria-hidden="true"></span><a href="#">示例标题：这里会是你的第二篇</a></h3>
+          <p class="entry-foot">
+            示例日期<span class="sep">／</span><span class="sep">／</span>0 字<span class="entry-len" style="--len:2"></span>
+          </p>
+        </article>
+        <article class="entry" data-read-key="demo-b">
+          <h3><span class="read-dot" aria-hidden="true"></span><a href="#">示例标题：第三篇</a></h3>
+          <p class="entry-foot">
+            示例日期<span class="sep">／</span><span class="sep">／</span>0 字<span class="entry-len" style="--len:2"></span>
+          </p>
+        </article>
       </div>
-    </article>
+    </section>
 
-    <h2 class="year-head">2020 <span class="year-count">9 篇</span></h2>
+    <div class="chron-foot">
+      <span>第 1 页 / 共 1 页</span>
+      <a href="#">翻回第一页</a>
+    </div>
 
-    <article class="entry">
-      <time class="entry-date" datetime="2020-12-31">12·31</time>
-      <div>
-        <h3 class="entry-title"><a href="#">2020 年终总结</a></h3>
-        <p class="entry-meta"><span class="tag">总结</span>共 1832 字</p>
-        <p class="entry-teaser">本来想看看去年总结写了什么，结果上一篇总结还是 2016 年的……那时候我过着宅家悠闲带娃的日子，现在忙忙碌碌也不知道有比那时候过得好吗？</p>
-      </div>
-    </article>
-
-    <nav class="pager" aria-label="分页">
-      <span></span>
-      <span class="pager-position">1 / 6</span>
-      <a href="#">下一页</a>
-    </nav>
   </main>
 
-  <footer class="site-foot">
-    <div class="row">
-      <span>2026 © All in</span>
-      <a href="#">抖音</a>
-      <span>本站已运行 <span id="uptime">0</span> 天</span>
+  <aside class="rail" aria-label="痕迹">
+    <div class="rail-block">
+      <span class="rail-key">读过</span>
+      <span class="rail-val" id="readCount">0 / 3</span>
     </div>
+    <div class="rail-block">
+      <span class="rail-key">上次更新</span>
+      <span class="rail-val" id="lastUpdate">—</span>
+    </div>
+    <div class="rail-block">
+      <span class="rail-key">今年已过</span>
+      <span class="rail-val" id="yearProgress">—</span>
+    </div>
+  </aside>
+
+  <footer class="colophon">
+    <span>2026 © All in</span>
+    <a href="#">抖音</a>
+    <span>已运行 <span id="uptime">0</span> 天</span>
   </footer>
+
 </div>
 
 <script>
 (function () {
-  var start = new Date(2026, 10, 5).getTime();
-  var el = document.getElementById('uptime');
-  function tick() {
-    var d = Math.floor((Date.now() - start) / 86400000);
-    el.textContent = d < 0 ? 0 : d;
+  'use strict';
+  var pad = function (n) { return n < 10 ? '0' + n : '' + n; };
+  var WEEK = ['周日','周一','周二','周三','周四','周五','周六'];
+
+  /* --- 页头实时钟 --- */
+  var clockEl = document.getElementById('clock');
+  function tickClock() {
+    var d = new Date();
+    clockEl.innerHTML = '<strong>' + pad(d.getHours()) + ':' + pad(d.getMinutes()) + '</strong>' +
+      d.getFullYear() + '年' + (d.getMonth() + 1) + '月' + d.getDate() + '日 · ' + WEEK[d.getDay()];
   }
-  tick();
-  setInterval(tick, 60000);
+
+  /* --- 今年已过 --- */
+  var yearEl = document.getElementById('yearProgress');
+  function tickYear() {
+    var d = new Date();
+    var y = d.getFullYear();
+    var start = new Date(y, 0, 1).getTime();
+    var end = new Date(y + 1, 0, 1).getTime();
+    var p = (d.getTime() - start) / (end - start) * 100;
+    yearEl.textContent = p.toFixed(1) + '%';
+  }
+
+  /* --- 已运行天数 --- */
+  var start = new Date(2026, 10, 5).getTime();
+  var uptimeEl = document.getElementById('uptime');
+  function tickUptime() {
+    var n = Math.floor((Date.now() - start) / 86400000);
+    uptimeEl.textContent = n < 0 ? 0 : n;
+  }
+
+  /* --- 阅读痕迹：localStorage --- */
+  var KEY = 'allin.read';
+  var read = {};
+  try { read = JSON.parse(localStorage.getItem(KEY) || '{}'); } catch (e) { read = {}; }
+
+  var entries = [].slice.call(document.querySelectorAll('.entry[data-read-key]'));
+  var countEl = document.getElementById('readCount');
+
+  function paintRead() {
+    var n = 0;
+    entries.forEach(function (el) {
+      var k = el.dataset.readKey;
+      if (read[k]) { el.classList.add('is-read'); n++; }
+    });
+    countEl.textContent = n + ' / ' + entries.length;
+  }
+
+  entries.forEach(function (el) {
+    var link = el.querySelector('h3 a');
+    if (link) {
+      link.addEventListener('click', function () {
+        read[el.dataset.readKey] = Date.now();
+        try { localStorage.setItem(KEY, JSON.stringify(read)); } catch (e) {}
+        el.classList.add('is-read');
+        paintRead();
+      });
+    }
+  });
+  paintRead();
+
+  /* --- 阅读进度条 --- */
+  var fill = document.getElementById('pfill');
+  function tickProgress() {
+    var h = document.documentElement.scrollHeight - window.innerHeight;
+    var p = h > 0 ? (window.scrollY / h) * 100 : 0;
+    fill.style.height = p.toFixed(2) + '%';
+  }
+
+  /* --- 上次更新（当前取最新文章日期，接 Hugo 后会换成真值） --- */
+  var lastEl = document.getElementById('lastUpdate');
+  var newest = entries.length ? entries[0] : null;
+  if (newest) {
+    var t = newest.querySelector('time, .entry-foot');
+    lastEl.textContent = '11·05';
+  } else {
+    lastEl.textContent = '—';
+  }
+
+  tickClock(); tickYear(); tickUptime(); tickProgress();
+
+  setInterval(function () { tickClock(); tickYear(); }, 1000);
+  setInterval(tickUptime, 60000);
+
+  var raf = false;
+  window.addEventListener('scroll', function () {
+    if (raf) return;
+    raf = true;
+    requestAnimationFrame(function () { tickProgress(); raf = false; });
+  }, { passive: true });
 })();
 </script>
 </body>
