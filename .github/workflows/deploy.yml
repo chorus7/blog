@@ -41,6 +41,21 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Sync posts from Notion
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
+          HUGO_POSTS_DIR: content/posts
+        run: |
+          if [ -z "$NOTION_TOKEN" ]; then
+            echo "::warning::NOTION_TOKEN 未配置，跳过同步"
+            exit 0
+          fi
+          python3 scripts/sync_notion.py --publish || {
+            echo "::warning::Notion 同步失败（网络或权限），继续用仓库里已有的文章构建"
+          }
+          git status --short content/posts || true
+
       - name: Build with Hugo
         run: |
           hugo \
