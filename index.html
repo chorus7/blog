@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All in — 设计原型</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css">
+<link rel="stylesheet" href="prototype.css">
+</head>
+<body>
+<a class="skip" href="#main">跳到正文</a>
+
+<div class="wrap">
+  <header class="site-head">
+    <a class="wordmark" href="#">All in
+      <span class="wordmark-sub">致 郁 系</span>
+    </a>
+    <nav class="nav" aria-label="主导航">
+      <a href="#" aria-current="page">首页</a>
+      <a href="#">归档</a>
+      <a href="#">关于</a>
+      <a href="#">友链</a>
+    </nav>
+  </header>
+
+  <main id="main" class="timeline">
+
+    <h2 class="year-head">2026 <span class="year-count">1 篇</span></h2>
+
+    <article class="entry">
+      <time class="entry-date" datetime="2026-11-05">11·05</time>
+      <div>
+        <h3 class="entry-title"><a href="#">中州第一篇：同步验证</a></h3>
+        <p class="entry-meta"><span class="tag">日常</span>共 65 字</p>
+        <p class="entry-teaser">这是一条用于验证 Notion → Hugo 同步链路的测试数据。如果能在生成的 md 里看到这段话，说明正文列通道工作正常。</p>
+      </div>
+    </article>
+
+    <h2 class="year-head">2025 <span class="year-count">13 篇</span></h2>
+
+    <article class="entry">
+      <time class="entry-date" datetime="2025-07-18">07·18</time>
+      <div>
+        <h3 class="entry-title"><a href="#">暑假开始，娃去了云南贵州浙江</a></h3>
+        <p class="entry-meta"><span class="tag">碎碎念</span><span class="tag">游记</span><span class="tag">游戏</span>共 543 字</p>
+        <p class="entry-teaser">上周娃放暑假，按照往年惯例要跟我爸妈去旅行啦。暂时计划是云南-贵州-浙江，具体就看我爸妈的心情，毕竟我也没机会参与。然后留在家里的两人就开启了孤寡中年人生活。</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <time class="entry-date" datetime="2025-07-05">07·05</time>
+      <div>
+        <h3 class="entry-title"><a href="#">出差回来，晚饭都没吃就睡了</a></h3>
+        <p class="entry-meta"><span class="tag">出差</span><span class="tag">记录</span>共 312 字</p>
+        <p class="entry-teaser">连着跑了三个现场，回到酒店鞋都不想脱。第二天在高铁上睡了一路，醒来发现坐过站。</p>
+      </div>
+    </article>
+
+    <article class="entry">
+      <time class="entry-date" datetime="2025-06-22">06·22</time>
+      <div>
+        <h3 class="entry-title"><a href="#">买了三样东西，两样后悔</a></h3>
+        <p class="entry-meta"><span class="tag">买买买</span>共 428 字</p>
+        <p class="entry-teaser">第一样是那个号称能自动收线的充电器，用了两天发现线是收进去了，接口裂了。</p>
+      </div>
+    </article>
+
+    <h2 class="year-head">2020 <span class="year-count">9 篇</span></h2>
+
+    <article class="entry">
+      <time class="entry-date" datetime="2020-12-31">12·31</time>
+      <div>
+        <h3 class="entry-title"><a href="#">2020 年终总结</a></h3>
+        <p class="entry-meta"><span class="tag">总结</span>共 1832 字</p>
+        <p class="entry-teaser">本来想看看去年总结写了什么，结果上一篇总结还是 2016 年的……那时候我过着宅家悠闲带娃的日子，现在忙忙碌碌也不知道有比那时候过得好吗？</p>
+      </div>
+    </article>
+
+    <nav class="pager" aria-label="分页">
+      <span></span>
+      <span class="pager-position">1 / 6</span>
+      <a href="#">下一页</a>
+    </nav>
+  </main>
+
+  <footer class="site-foot">
+    <div class="row">
+      <span>2026 © All in</span>
+      <a href="#">抖音</a>
+      <span>本站已运行 <span id="uptime">0</span> 天</span>
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var start = new Date(2026, 10, 5).getTime();
+  var el = document.getElementById('uptime');
+  function tick() {
+    var d = Math.floor((Date.now() - start) / 86400000);
+    el.textContent = d < 0 ? 0 : d;
+  }
+  tick();
+  setInterval(tick, 60000);
+})();
+</script>
+</body>
+</html>
