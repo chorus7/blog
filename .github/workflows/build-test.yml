@@ -1,0 +1,47 @@
+name: Build test (no deploy)
+
+# 临时文件：只验证 Hugo 能否在 Actions 环境构建成功，不部署。
+# 验证通过后删除。
+on:
+  push:
+    branches-ignore: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.161.1
+      HUGO_ENVIRONMENT: production
+      TZ: Asia/Shanghai
+    steps:
+      - name: Install Hugo CLI
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb
+          sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          hugo version
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Build with Hugo
+        run: |
+          hugo --minify --gc --baseURL "https://chorus7.github.io/blog/"
+
+      - name: Verify output
+        run: |
+          echo "=== 构建产物 ==="
+          find public/posts -name "index.html"
+          echo "=== 文章数 ==="
+          find public/posts -mindepth 2 -name "index.html" | wc -l
+          echo "=== 首页非空检查 ==="
+          test -s public/index.html && echo "index.html 非空 OK"
