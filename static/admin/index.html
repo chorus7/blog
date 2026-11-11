@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>后台 · Pill</title>
+<link rel="icon" href="/blog/img/favicon.png" />
+<style>
+  /* 加载占位：Sveltia 接管后会被替换，避免白屏 */
+  html, body { margin: 0; height: 100%; }
+  body {
+    display: grid;
+    place-items: center;
+    background: #efe0e0;
+    color: #4e5b4a;
+    font: 15px/1.7 -apple-system, "Segoe UI", "Microsoft YaHei", sans-serif;
+  }
+  #boot { text-align: center; }
+  #boot p { margin: 0.5em 0 0; color: #6b6260; font-size: 13px; }
+</style>
+</head>
+<body>
+<div id="boot">
+  <div>正在加载后台…</div>
+  <p>首次打开需要几秒，之后会缓存。</p>
+</div>
+<noscript>后台需要 JavaScript，请开启后重试。</noscript>
+
+<!-- Sveltia 已内置在仓库内（static/admin/dist/），不走 CDN：
+     jsdelivr 在国内直连不通，unpkg 拉 2.5MB 要 20 秒，
+     本地化后首屏和 chunk 都从本站取。 -->
+<script src="./dist/sveltia-cms.js"></script>
+</body>
+</html>

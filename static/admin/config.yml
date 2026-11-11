@@ -1,0 +1,154 @@
+# 后台配置 · Sveltia CMS
+# 文档：https://sveltiacms.app/en/docs
+#
+# 登录方式：GitHub 个人访问令牌（PAT）。
+# 仓库公开，令牌只存在你自己浏览器的 localStorage 里，不进仓库。
+# 需要的权限：Contents 读写（细粒度令牌），或经典令牌的 repo 范围。
+
+backend:
+  name: github
+  repo: chorus7/blog
+  branch: main
+  # 不开 editorial workflow：随记讲究写完即发，
+  # 多一步「待审核」反而碍事。
+  # 如需草稿态，在文章里把 draft 打开即可，Hugo 默认不渲染 draft。
+
+# 站点发布地址，后台预览用
+site_url: https://chorus7.github.io/blog/
+display_url: https://chorus7.github.io/blog/
+logo_url: https://chorus7.github.io/blog/img/favicon.png
+
+# 界面语言
+locale: zh_Hans
+
+# ============================================================
+# 媒体：默认走仓库内（page bundle 同目录），大图另走 Azure Blob
+# ============================================================
+# 顶层默认：文章以外的图片放 static/img/uploads
+media_folder: static/img/uploads
+public_folder: /blog/img/uploads
+
+media_libraries:
+  # Azure Blob 作为第二图床。SAS 令牌不写在这里，
+  # 首次使用时会弹窗让你粘贴，只存在浏览器里。
+  azure_blob_storage:
+    label: Azure（大图）
+    account_name: ""          # 待你开通后填
+    container: media
+    public_url: ""            # 待你开通后填
+    prefix: blog/
+
+  default:
+    config:
+      # 上传时自动转 webp 并限宽，控制仓库体积
+      transformations:
+        raster_image:
+          format: webp
+          quality: 82
+          width: 1600
+          height: 1600
+      # 单文件上限 3MB，超了让人先压缩
+      max_file_size: 3145728
+      slugify_filename: true
+
+# ============================================================
+# 集合
+# ============================================================
+collections:
+  # ---------- 随记 ----------
+  - name: posts
+    label: 随记
+    label_singular: 一篇随记
+    folder: content/posts
+    # 每篇文章一个目录，图片放同目录 —— 与现有 page bundle 一致
+    path: "{{slug}}/index"
+    media_folder: ""
+    public_folder: ""
+    create: true
+    # 新文章默认不是草稿，写完保存即上线
+    # （Hugo 的 draft: true 才不会渲染）
+    extension: md
+    format: yaml-frontmatter
+    # 目录名 = 日期 + 短名（如 20261111-hello），Hugo 直接用目录名生成地址，
+    # 不写 slug front matter，省掉「目录名/字段值」两处同步的麻烦。
+    # 不按标题自动生成：中文标题会原样进 URL（踩过）。
+    slug:
+      template: "{{year}}{{month}}{{day}}-{{fields.slugname}}"
+      encoding: ascii
+    summary: "{{title}} · {{date}}"
+    sort_by: date
+    sort_direction: desc
+    # 预览地址：Hugo 用目录名生成地址，所以直接用 slug（已是完整 20261111-hello）
+    preview_path: "posts/{{slug}}/"
+    fields:
+      - name: title
+        label: 标题
+        widget: string
+        hint: 一句话说清这篇写了什么
+
+      - name: date
+        label: 日期
+        widget: datetime
+        date_format: YYYY-MM-DD
+        time_format: HH:mm
+        format: YYYY-MM-DDTHH:mm:ssZ
+        hint: 一天可发多篇，时间精确到分钟
+
+      # 只填短名，日期前缀自动带上
+      - name: slugname
+        label: URL 短名
+        widget: string
+        required: false
+        default: note
+        hint: 只用小写英文、数字、连字符，例 hello 或 sync-test。最终地址自动变成 20261111-hello 这种。
+
+      - name: draft
+        label: 草稿
+        widget: boolean
+        default: false
+        hint: 勾上则 Hugo 不渲染，线上看不到
+
+      - name: categories
+        label: 分类
+        widget: list
+        required: false
+        default: ["日常"]
+        hint: 一般只填一个，会出现在文章页和分类页
+
+      - name: tags
+        label: 标签
+        widget: list
+        required: false
+        hint: 可多个，对应 /tags/ 页
+
+      - name: body
+        label: 正文
+        widget: markdown
+        hint: 支持 Markdown，也支持直接写 HTML（hugo.toml 已开 unsafe）
+
+  # ---------- 固定页面 ----------
+  - name: pages
+    label: 固定页面
+    files:
+      - name: about
+        label: About
+        file: content/about.md
+        fields:
+          - name: title
+            label: 标题
+            widget: string
+          - name: body
+            label: 正文
+            widget: markdown
+
+      - name: links
+        label: Links
+        file: content/links.md
+        fields:
+          - name: title
+            label: 标题
+            widget: string
+          - name: body
+            label: 正文
+            widget: markdown
+            hint: 一行一个链接，写成 - [名字](地址)
