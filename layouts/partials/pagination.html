@@ -1,11 +1,15 @@
 {{ if gt .Paginator.TotalPages 1 }}
 	<ul class="pagination">
 		{{- if .Paginator.HasPrev }}
-		<span class="page-item page-prev"><a class="page-link" href="{{ .Paginator.Prev.URL }}">← Prev</a></span>
+		<li class="page-item page-prev"><a class="page-link" href="{{ .Paginator.Prev.URL }}" rel="prev">{{ partial "icon.html" (dict "name" "chevron-left") }}Prev</a></li>
+		{{- else }}
+		<li class="page-item page-prev"></li>
 		{{- end }}
-		<span class="page-item page-number">{{ .Paginator.PageNumber }} of {{ .Paginator.TotalPages }}</span>
+		<li class="page-item page-number">{{ .Paginator.PageNumber }} of {{ .Paginator.TotalPages }}</li>
 		{{- if .Paginator.HasNext }}
-		<span class="page-item page-next"><a class="page-link" href="{{ .Paginator.Next.URL }}">Next →</a></span>
+		<li class="page-item page-next"><a class="page-link" href="{{ .Paginator.Next.URL }}" rel="next">Next{{ partial "icon.html" (dict "name" "chevron-right") }}</a></li>
+		{{- else }}
+		<li class="page-item page-next"></li>
 		{{- end }}
 	</ul>
 {{ end }}

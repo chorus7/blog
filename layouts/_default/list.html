@@ -5,17 +5,29 @@
 				<section class="list-item">
 					<div class="post-container">
 						<div class="post-content">
-							<h1 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h1>
+							<h2 class="title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
 							<div class="meta">
-								{{ .Date.Format "2006年1月2日" }}{{ if .Params.categories }}  ⋮ 
+								{{ .Date.Format "2006年1月2日" }}{{ if .Params.categories }}  ⋮
 								{{- range .Params.categories }}<a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}{{ end }}
 							</div>
 							{{- if .Params.summary }}
 							<div class="summary">{{ .Params.summary | markdownify }}</div>
 							{{- else }}
-							<div class="summary">{{ .Summary }}</div>
+							{{- /* 没有手写 summary 时取正文前两段纯文本。
+							       原站直接把 .Summary 整段 HTML 塞进来，首页会冒出整块 polaroid / note，
+							       图被容器裁掉一半，摘要也不像摘要。 */}}
+							{{- $plain := .Summary
+								| replaceRE `<div class="(note|polaroid)[\s\S]*?</div>\s*` ""
+								| replaceRE `<h[1-6][^>]*>[\s\S]*?</h[1-6]>` ""
+								| plainify | htmlUnescape -}}
+							{{- $paras := slice -}}
+							{{- range split $plain "\n" -}}
+								{{- $t := . | strings.TrimSpace -}}
+								{{- if $t }}{{ $paras = $paras | append (truncate 150 $t) }}{{ end -}}
+							{{- end -}}
+							<div class="summary">{{ range first 2 $paras }}<p>{{ . }}</p>{{ end }}</div>
 							{{- end }}
-							<a href="{{ .RelPermalink }}" class="readmore">Read More</a>
+							<a href="{{ .RelPermalink }}" class="readmore">Read More{{ partial "icon.html" (dict "name" "arrow-right") }}</a>
 						</div>
 					</div>
 				</section>

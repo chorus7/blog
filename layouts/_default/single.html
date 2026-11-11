@@ -1,24 +1,54 @@
 {{ define "main" }}
 				<article class="post">
 				<div class="title">
-					<h1 class="title">{{ .Title }}</h1>
-					<div class="meta">
-						{{ .Date.Format "2006年1月2日" }}  ⋮  共{{ .Content | plainify | strings.RuneCount }}字{{ with .Params.categories }}  ⋮  <span class="tags">{{ range . }}<a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}</span>{{ end }}
+					<h1 class="title t-stagger">
+						<span class="t-stagger-line t-stagger-line--1">{{ .Title }}</span>
+					</h1>
+					<div class="meta t-stagger">
+						<span class="t-stagger-line t-stagger-line--2">
+							{{- if eq .Section "posts" -}}
+								{{ .Date.Format "2006年1月2日" }}  ⋮  共{{ .Content | plainify | strings.RuneCount }}字
+								{{- with .Params.categories }}  ⋮  <span class="tags">{{ range . }}<a href="{{ "/categories/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}</span>{{ end }}
+							{{- else -}}
+								{{- $who := .Site.Params.author | default .Site.Title -}}
+								{{- if .Lastmod.IsZero }}{{ $who }}{{ else }}{{ $who }}  ⋮  更新于 {{ .Lastmod.Format "2006年1月2日" }}{{ end -}}
+							{{- end -}}
+						</span>
 					</div>
 				</div>
+
+				{{- with .TableOfContents }}
+				{{- /* 只有 1~2 节的短文不需要目录，否则首屏被一条控件抢走起点 */}}
+				{{- if ge (len (findRE "<li" .)) 3 }}
+				{{- /* 桌面贴右侧，窄屏折叠在正文顶部；同一份目录两个位置，只显示其一 */}}
+				<div class="toc-rail" aria-label="目录">
+					<span class="toc-title">目录</span>
+					<nav class="toc" id="toc-rail">{{ . }}</nav>
+				</div>
+				<div class="toc-inline t-acc" data-open="false" data-toc-acc>
+					<button class="t-acc-head" type="button" aria-expanded="false" aria-controls="toc-inline-panel">
+						<span>目录</span>
+						<span class="t-acc-chevron">{{ partial "icon.html" (dict "name" "chevron-down") }}</span>
+					</button>
+					<div class="t-acc-panel" id="toc-inline-panel">
+						<div class="t-acc-panel-inner">
+							<nav class="toc" id="toc-inline">{{ . }}</nav>
+						</div>
+					</div>
+				</div>
+				{{- end }}
+				{{- end }}
+
 				<section class="body">
 					{{ .Content }}
 				</section>
 				<div class="postnav">
 					{{- with .PrevInSection }}
-					<span class="prev_post"><a class="prev" href="{{ .RelPermalink }}">← {{ .Title }}</a></span>
+					<span class="prev_post"><a class="prev" href="{{ .RelPermalink }}">{{ partial "icon.html" (dict "name" "arrow-left") }}{{ .Title }}</a></span>
 					{{- end }}
 					{{- with .NextInSection }}
-					<span class="next_post"><a class="next" href="{{ .RelPermalink }}">{{ .Title }} →</a></span>
+					<span class="next_post"><a class="next" href="{{ .RelPermalink }}">{{ .Title }}{{ partial "icon.html" (dict "name" "arrow-right") }}</a></span>
 					{{- end }}
-				</div>
-				<div class="post-comments">
-					<div id="tcomment"></div>
 				</div>
 				</article>
 {{ end }}

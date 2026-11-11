@@ -1,6 +1,35 @@
+{{- $nav := .Site.Params.nav -}}
+{{- $links := slice
+	(dict "key" "home" "label" $nav.home "href" .Site.Home.RelPermalink "match" .IsHome)
+	(dict "key" "archives" "label" $nav.archives "href" ("posts/" | relURL) "match" (eq .Section "posts"))
+	(dict "key" "about" "label" $nav.about "href" ("about/" | relURL) "match" (eq .RelPermalink ("about/" | relURL)))
+	(dict "key" "links" "label" $nav.links "href" ("links/" | relURL) "match" (eq .RelPermalink ("links/" | relURL)))
+-}}
 <header>
 	<div class="main">
+		{{- /* 首页把站名作为唯一的 h1（列表条目已降为 h2），其他页面用 div 以免多出 h1 */}}
+		{{- if .IsHome }}
+		<h1 class="site-title t-stagger"><a href="{{ .Site.Home.RelPermalink }}"><span class="t-stagger-line t-stagger-line--1">{{ .Site.Title }}</span></a></h1>
+		{{- else }}
 		<a href="{{ .Site.Home.RelPermalink }}">{{ .Site.Title }}</a>
+		{{- end }}
 	</div>
-	<nav><a href="{{ .Site.Home.RelPermalink }}">Home</a><a href="{{ "posts/" | relURL }}">Archives</a><a href="{{ "about/" | relURL }}">About</a><a href="{{ "links/" | relURL }}">Links</a></nav>
+	<nav aria-label="主导航">
+		{{- range $links }}
+		<a href="{{ .href }}"{{ if .match }} aria-current="page"{{ end }}>{{ .label }}</a>
+		{{- end }}
+		<span class="t-tt-group nav-theme">
+			<button class="theme-toggle t-tt-trigger" type="button" data-theme-toggle
+				data-tooltip="切换深浅色" aria-describedby="tt-theme" aria-pressed="false">
+				<span class="t-icon-swap" data-state="a" aria-hidden="true">
+					<span class="t-icon" data-icon="a">{{ partial "icon.html" (dict "name" "moon") }}</span>
+					<span class="t-icon" data-icon="b">{{ partial "icon.html" (dict "name" "sun") }}</span>
+				</span>
+				<span class="sr-only">切换深浅色</span>
+			</button>
+			<span class="t-tt" id="tt-theme" role="tooltip" aria-hidden="true" data-show="false">
+				<span class="t-tt-text"></span>
+			</span>
+		</span>
+	</nav>
 </header>

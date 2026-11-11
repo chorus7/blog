@@ -1,0 +1,9 @@
+{{- /*
+  Lucide 图标内联：源文件取自 lucide-static v0.544.0（ISC 许可），
+  原样放在 assets/icons/ 下，这里只补无障碍属性，不手写路径。
+  用法：{{ partial "icon.html" (dict "name" "arrow-right") }}
+*/ -}}
+{{- $name := .name -}}
+{{- with resources.Get (printf "icons/%s.svg" $name) -}}
+{{- .Content | replaceRE `<svg` `<svg aria-hidden="true" focusable="false"` | safeHTML -}}
+{{- end -}}

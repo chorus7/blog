@@ -1,7 +1,11 @@
 {{ define "main" }}
-	<div class="category-item">
+	<div class="page-head">
+		<h1 class="title">分类</h1>
+		<div class="meta">共 {{ len .Site.Taxonomies.categories }} 个</div>
+	</div>
+	<div class="category-list">
 		{{- range .Site.Taxonomies.categories }}
-		<a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
+		<span class="category-item"><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a></span>
 		{{- end }}
 	</div>
 {{ end }}

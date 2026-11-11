@@ -1,7 +1,11 @@
 {{ define "main" }}
+	<div class="page-head">
+		<h1 class="title">标签 · {{ .Title }}</h1>
+		<div class="meta">共 {{ len .Pages }} 篇</div>
+	</div>
 	<ul class="article-list">
 		{{- range .Pages }}
-		<li><span class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span> <span class="post-date">{{ .Date.Format "2006-01-02" }}</span></li>
+		<li><span class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span><span class="post-date">{{ .Date.Format "2006-01-02" }}</span></li>
 		{{- end }}
 	</ul>
 {{ end }}

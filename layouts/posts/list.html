@@ -1,10 +1,19 @@
 {{ define "main" }}
+	<div class="page-head">
+		<h1 class="title t-stagger">
+			<span class="t-stagger-line t-stagger-line--1">Archives</span>
+		</h1>
+		<div class="meta t-stagger">
+			<span class="t-stagger-line t-stagger-line--2">共 {{ len (where .Site.RegularPages "Section" "posts") }} 篇</span>
+		</div>
+	</div>
 	{{ range (.Site.RegularPages.GroupByDate "2006") }}
-	{{- if where .Pages "Section" "posts" }}
-	<h2 class="archive-year-header">{{ .Key }} <sup class="archive-count">{{ len .Pages }}</sup></h2>
+	{{- $pages := where .Pages "Section" "posts" }}
+	{{- if $pages }}
+	<h2 class="archive-year-header">{{ .Key }} <sup class="archive-count">{{ len $pages }}</sup></h2>
 	<ul class="article-list">
-		{{- range .Pages }}
-		<li><span class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span> <span class="post-date">{{ .Date.Format "01-02" }}</span></li>
+		{{- range $pages }}
+		<li><span class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></span><span class="post-date">{{ .Date.Format "01-02" }}</span></li>
 		{{- end }}
 	</ul>
 	{{- end }}

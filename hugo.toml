@@ -36,6 +36,11 @@ paginatePath = "page"
       unsafe = true
   [markup.highlight]
     noClasses = false
+  [markup.tableOfContents]
+    # 文章目录只取二、三级标题，标题层级也正好对得上
+    startLevel = 2
+    endLevel = 3
+    ordered = false
 
 [outputs]
   home = ["HTML", "RSS"]

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" class="no-js" data-theme="light">
 	<head>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -8,12 +8,30 @@
 	{{- with .Description }}
 	<meta name="description" content="{{ . }}">
 	{{- end }}
-	<link rel="icon" href="{{ "img/favicon.png" | relURL }}" type="image/png" />
+	<meta name="color-scheme" content="light dark">
+	<meta name="theme-color" content="#efe0e0" media="(prefers-color-scheme: light)">
+	<meta name="theme-color" content="#1b1618" media="(prefers-color-scheme: dark)">
+	<script>
+	// 首屏前定主题，避免闪白
+	(function () {
+		var root = document.documentElement;
+		root.classList.remove("no-js");
+		var theme;
+		try { theme = localStorage.getItem("theme"); } catch (e) {}
+		if (theme !== "light" && theme !== "dark") {
+			theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+		}
+		root.dataset.theme = theme;
+	})();
+	</script>
+	<link rel="icon" href="{{ "img/favicon.png" | relURL }}" type="image/png" sizes="64x64" />
+	<link rel="apple-touch-icon" href="{{ "img/favicon.png" | relURL }}" />
 	<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | relURL }}" title="{{ .Site.Title }}" />
 	{{- $css := resources.Get "css/main.css" | minify | fingerprint }}
 	<link rel="stylesheet" type="text/css" media="screen" href="{{ $css.RelPermalink }}" />
 </head>
 	<body>
+		<div class="spark-layer" aria-hidden="true"></div>
 		<div class="content">
 			{{ partial "header.html" . }}
 			<main class="{{ if .IsHome }}list{{ else if eq .Kind "page" }}single{{ else }}list{{ end }}">
@@ -21,6 +39,8 @@
 			</main>
 			{{ partial "footer.html" . }}
 		</div>
+		{{- $js := resources.Get "js/main.js" | minify | fingerprint }}
+		<script src="{{ $js.RelPermalink }}" defer></script>
 		{{ block "scripts" . }}{{ end }}
 	</body>
 </html>

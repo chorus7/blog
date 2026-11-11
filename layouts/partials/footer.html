@@ -1,29 +1,79 @@
+<footer>
 <div class="footer-info">
 	<span class="footer-left">{{ now.Format "2006" }}© {{ .Site.Title }}</span>
 	{{- with .Site.Params.douyin }}
 	<span class="footer-sep">·</span>
-	<a class="footer-douyin" href="{{ . }}" target="_blank" rel="noopener noreferrer me">抖音</a>
+	<a class="footer-douyin" href="{{ . }}" target="_blank" rel="noopener noreferrer me">抖音{{ partial "icon.html" (dict "name" "arrow-up-right") }}</a>
 	{{- end }}
 	{{- with .Site.Params.startDate }}
 	{{- $start := time.AsTime . }}
 	{{- $days := int (div (sub now.Unix $start.Unix) 86400) }}
 	{{- if lt $days 0 }}{{ $days = 0 }}{{ end }}
 	<span class="footer-sep">·</span>
-	<span class="footer-uptime">本站已运行 <span id="uptime-days">{{ $days }}</span> 天</span>
+	<span class="footer-uptime">本站已运行
+		<span class="t-digit-group" id="uptime-days" data-days="{{ $days }}" aria-label="{{ $days }} 天">
+			<span class="sr-only">{{ $days }}</span>
+		</span>
+		天</span>
 	{{- end }}
 </div>
+</footer>
 {{- with .Site.Params.startDate }}
 <script>
+// 无 JS 时数字仍由上面的 sr-only 文本给出；这里只负责每日递增与数字滚动
 (function(){
   var start = {{ (time.AsTime .).Unix }} * 1000;
-  function tick(){
-    var d = Math.floor((Date.now() - start) / 86400000);
-    if (d < 0) d = 0;
-    var el = document.getElementById("uptime-days");
-    if (el) el.textContent = d;
+  var group = document.getElementById("uptime-days");
+  if (!group) return;
+  function days(){ var d = Math.floor((Date.now() - start) / 86400000); return d < 0 ? 0 : d; }
+  function render(value, animate){
+    var digits = String(value).split("");
+    var old = group.querySelectorAll(".t-digit");
+    if (old.length !== digits.length || !group.dataset.ready) animate = false;
+    var frag = document.createDocumentFragment();
+    digits.forEach(function(ch, i){
+      var slot = document.createElement("span");
+      slot.className = "t-digit-slot";
+      if (animate && old[i] && old[i].textContent === ch) {
+        var same = document.createElement("span");
+        same.className = "t-digit";
+        same.setAttribute("data-same", "");
+        same.textContent = ch;
+        slot.appendChild(same);
+      } else {
+        if (animate && old[i]) {
+          var out = document.createElement("span");
+          out.className = "t-digit-old";
+          out.setAttribute("aria-hidden", "true");
+          out.textContent = old[i].textContent;
+          slot.appendChild(out);
+        }
+        var cur = document.createElement("span");
+        cur.className = "t-digit";
+        if (i < 2) cur.setAttribute("data-stagger", String(i));
+        cur.textContent = ch;
+        slot.appendChild(cur);
+      }
+      frag.appendChild(slot);
+    });
+    group.replaceChildren(frag);
+    group.dataset.ready = "1";
+    group.setAttribute("aria-label", value + " 天");
+    var sr = group.querySelector(".sr-only");
+    if (!sr) { sr = document.createElement("span"); sr.className = "sr-only"; group.appendChild(sr); }
+    sr.textContent = value;
+    if (animate) {
+      group.classList.remove("is-animating");
+      void group.offsetWidth;
+      group.classList.add("is-animating");
+    }
   }
-  tick();
-  setInterval(tick, 60000);
+  var current = days();
+  render(current, false);
+  setInterval(function(){
+    var next = days();
+    if (next !== current) { current = next; render(next, true); }
+  }, 60000);
 })();
 </script>
 {{- end }}

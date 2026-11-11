@@ -13,3 +13,8 @@ __pycache__/
 
 # Obsidian Git 插件的凭据不落盘
 .obsidian/plugins/obsidian-git/data.json
+# 设计取证与轮次记录（本地工作产物，不入站）
+ref/
+.lsf/
+rounds/
+assets-plan.json

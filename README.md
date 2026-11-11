@@ -170,3 +170,21 @@ https://chorus7.github.io/blog/
 3. **不要删 `.obsidian/plugins/`**，那是插件本体，删了手机端就得重新装。
 4. **文章文件夹名**建议只用英文、数字、连字符，避免中文路径在不同系统上的编码问题。
    URL 也干净。
+
+---
+
+## 八、组件来源（供 `assets/js/main.js` 头注释引用）
+
+主题里的动效与交互不是凭空写的，逐个对应开源组件，按 `名称 / 源文件与许可 / 落地位置 / 证据` 记录如下。共 6 项，覆盖首页、文章页与全站页脚。
+
+| # | 组件 | 源文件与许可 | 落地位置 | 证据 |
+|---|---|---|---|---|
+| 1 | 点击火花 ClickSpark | React Bits `DavidHDev/react-bits` `ClickSpark.jsx`，MIT + Commons Clause v1.0（© 2026 David Haz，不单独转售） | `assets/js/main.js` `initSpark()`，原生 canvas 改写 | 点击页面任意处，火花粒子从点击点扩散后归零；`reduceMotion` 下不创建 canvas |
+| 2 | 数字滚动 number-pop-in | transitions.dev `02-number-pop-in.md`，个人/商用免费、禁再分发 | `layouts/partials/footer.html` 内联 `render()` + `assets/css/main.css` `.t-digit*` | 页脚「本站已运行 N 天」由服务端算天数、前端按位滚动渲染 |
+| 3 | 标题入场 texts-reveal | transitions.dev `18-texts-reveal.md`，同上 | `assets/js/main.js` `initReveal()` + `.t-stagger` | 首页站名、文章/归档 h1 与 meta 分批入场，`prefers-reduced-motion` 直接显示 |
+| 4 | 图标切换 icon-swap | transitions.dev `09-icon-swap.md`，同上 | `partials/header.html` 深浅色按钮 + `.t-icon-swap` | 主题按钮在 moon/sun 间切换，带缩放/模糊过渡 |
+| 5 | 手风琴 accordion | transitions.dev `21-accordion.md`，同上 | `layouts/_default/single.html` TOC 折叠 + `main.js` `initAccordions()` | 窄屏文章页「目录」展开/收起，`aria-expanded` 同步 |
+| 6 | 提示气泡 tooltip | transitions.dev `17-tooltip.md`，同上 | `main.js` `initTooltips()` + `.t-tt-*` | 主题按钮悬停/聚焦显示「切换深浅色」 |
+| 7 | 图标（8 个） | Lucide `lucide-static v0.544.0`，ISC | `assets/icons/*.svg`，经 `partials/icon.html` `resources.Get` 引入 | 每份 SVG 头部保留 `@license lucide-static v0.544.0 - ISC` |
+
+> 说明：第 7 项是图标库不是动效组件；动效组件合计 6 项。8 个图标分别是 `arrow-left`、`arrow-right`、`arrow-up-right`、`chevron-down`、`chevron-left`、`chevron-right`、`moon`、`sun`，模板里全部有实际引用；未用到的 `clock`、`external-link`、`list`、`menu`、`rss` 已删，不留死文件。SpotlightCard（React Bits）已读源码但**未采用**——它要求整卡悬停高亮，与本主题「禁用卡片 hover 上浮」的反套路约定冲突，故舍去。
