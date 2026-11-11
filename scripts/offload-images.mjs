@@ -60,14 +60,31 @@ async function uploadBlob(name, buf, contentType) {
   const blobType = 'BlockBlob';
   const contentLength = buf.length;
 
-  // 规范化的资源与头，顺序必须按 Azure 文档
+  // StringToSign 格式（Azure 文档 SharedKey，字段顺序固定）：
+  //   VERB\nContent-Encoding\nContent-Language\nContent-Length\nContent-MD5\n
+  //   Content-Type\nDate\nIf-Modified-Since\nIf-Match\nIf-None-Match\n
+  //   If-Unmodified-Since\nRange\nCanonicalizedHeaders\nCanonicalizedResource
+  // 两个坑（都踩过）：
+  //   1. CanonicalizedResource 后面不能再有换行，多一个 \n 签名就对不上
+  //   2. 所有 x-ms-* 请求头都要按字典序进签名，包括 x-ms-blob-type
   const canonicalHeaders =
     `x-ms-blob-type:${blobType}\n` +
     `x-ms-date:${now}\n` +
     `x-ms-version:${version}\n`;
   const canonicalResource = `/${AccountName}/${CONTAINER}/${name}`;
   const stringToSign =
-    `PUT\n\n\n${contentLength}\n\n${contentType}\n\n\n\n\n\n\n` +
+    'PUT\n' +          // VERB
+    '\n' +             // Content-Encoding
+    '\n' +             // Content-Language
+    `${contentLength}\n` + // Content-Length
+    '\n' +             // Content-MD5
+    `${contentType}\n` +   // Content-Type
+    '\n' +             // Date
+    '\n' +             // If-Modified-Since
+    '\n' +             // If-Match
+    '\n' +             // If-None-Match
+    '\n' +             // If-Unmodified-Since
+    '\n' +             // Range
     canonicalHeaders +
     canonicalResource;
 
@@ -89,7 +106,13 @@ async function uploadBlob(name, buf, contentType) {
   });
   if (!res.ok) {
     const t = await res.text();
-    throw new Error(`上传失败 ${res.status}: ${t.slice(0, 200)}`);
+    const want = t.match(/Server used following string to sign: '([\s\S]*?)<\/Message>/);
+    if (want) {
+      throw new Error(
+        `上传失败 ${res.status}\n--- 我发的 ---\n${JSON.stringify(stringToSign)}\n--- 服务器要的 ---\n${JSON.stringify(want[1])}`
+      );
+    }
+    throw new Error(`上传失败 ${res.status}: ${t.slice(0, 300)}`);
   }
   return url;
 }

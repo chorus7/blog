@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Pill 博客的弹幕留言后端：Azure Functions + 表存储",
   "type": "module",
-  "main": "src/functions/*.js",
+  "main": "src/index.js",
   "engines": { "node": ">=20" },
   "scripts": {
     "start": "func start",

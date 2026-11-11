@@ -23,12 +23,19 @@ function corsHeaders(origin) {
 }
 
 function clientIp(req) {
-  // Azure 前置代理会把真实 IP 放进这两个头
-  return (
+  // Azure 前置代理会把真实 IP 放进这两个头。
+  // 注意：x-forwarded-for 的值可能是 "1.2.3.4:5678"（带端口），端口每次连接都不同，
+  // 直接拿去哈希会让同一台机器每次都被当成新访客，限频形同虚设（踩过）。
+  const raw =
     req.headers.get('x-forwarded-for')?.split(',')[0].trim() ||
     req.headers.get('x-real-ip') ||
-    '0.0.0.0'
-  );
+    '';
+  // 去掉 IPv4 的 :port，以及 IPv6 的 [::1]:port 形式
+  const ip = raw
+    .replace(/^\[([^\]]+)\](?::\d+)?$/, '$1')
+    .replace(/^(\d{1,3}(?:\.\d{1,3}){3}):\d+$/, '$1')
+    .trim();
+  return ip || '0.0.0.0';
 }
 
 app.http('danmaku', {

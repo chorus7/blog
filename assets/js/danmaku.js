@@ -87,17 +87,19 @@
     el.textContent = it.text;
     el.title = it.name ? it.name + "：" + it.text : it.text;
 
+    if (reduceMotion.matches) {
+      // 不跑动画：静态平铺，保留最近 8 条，新的挤掉最旧的。
+      // 不能定时移除 —— 那会让偏好减少动效的人打开页面 4 秒后就什么都看不到。
+      stage.appendChild(el);
+      while (stage.children.length > 8) stage.removeChild(stage.firstChild);
+      return;
+    }
+
     laneCount = lanes();
     lastLane = (lastLane + 1) % laneCount;
     el.style.top = lastLane * 34 + "px";
 
     stage.appendChild(el);
-
-    if (reduceMotion.matches) {
-      // 不动：静置 4 秒后淡出
-      setTimeout(function () { el.remove(); }, 4000);
-      return;
-    }
 
     // 距离决定时长，保证速度一致（约 90px/s）
     // 起点/终点都用像素：translateX 的百分比基准是元素自身宽度，不是容器
@@ -121,7 +123,8 @@
     function next() {
       if (i >= recent.length) return;
       shoot(recent[i++]);
-      setTimeout(next, 1200);
+      if (!reduceMotion.matches) setTimeout(next, 1200);
+      else next(); // 静态模式不需要排队等动画，一次铺满
     }
     next();
   }

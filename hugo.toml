@@ -21,7 +21,7 @@ paginatePath = "page"
   # Azure Functions 的接口根地址，末尾不带斜杠。
   # 留空则整块不渲染 —— 函数应用还没开通前，线上不会出现点了没反应的框。
   # 形如：https://pill-danmaku.azurewebsites.net/api
-  danmakuApi = ""
+  danmakuApi = "https://pill-danmaku.azurewebsites.net/api"
 
   # ===== 浏览器标签标题 =====
   # 首页标题

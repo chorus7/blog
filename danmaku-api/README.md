@@ -3,9 +3,11 @@
 后端代码已经写好在 `danmaku-api/`，前端在 `assets/js/danmaku.js` + `assets/css/danmaku.css`，
 页面模板 `layouts/partials/danmaku.html`。
 
-**现在前端默认不渲染**（`hugo.toml` 里 `danmakuApi = ""`），
-因为函数应用还没开通 —— 这样线上不会出现一个点了没反应的框。
-下面四步做完，把接口地址填进去就自动出现。
+**当前已上线**：函数应用 `pill-danmaku`（East Asia，Linux 消耗计划，Node 20），
+接口 `https://pill-danmaku.azurewebsites.net/api`，已填进 `hugo.toml` 的 `danmakuApi`。
+存储用同一个资源组里的 `pan0020`（表 `danmaku`、容器 `images`）。
+
+下面是**从零重建一遍**的步骤，留着以后换账号或重建时用。
 
 ---
 
@@ -44,16 +46,32 @@
    - `https://chorus7.github.io`
    - `http://127.0.0.1:8123`（本地预览用）
 
+> 部署时踩过的坑，重建时照着避：
+>
+> 1. **`package.json` 必须有 `main`**，指向一个 import 了各函数模块的入口文件
+>    （这里是 `src/index.js`）。Node v4 编程模型靠它找函数，缺了它
+>    `GET /admin/functions` 返回空数组、路由全是 404。
+> 2. **别设 `WEBSITE_RUN_FROM_PACKAGE=1`**。它会和 zipdeploy 打架，
+>    站点直接 503（The service is unavailable）。
+> 3. **`x-forwarded-for` 带端口**（形如 `1.2.3.4:27601`），
+>    端口每次都变。拿它直接哈希会让同一台机器每次都被当成新访客、限频失效。
+>    `danmaku.js` 的 `clientIp()` 已去掉端口。
+> 4. 门户的「创建函数应用」页在部分网络下渲染空白，改用 ARM REST 建更快：
+>    先 `POST .../providers/Microsoft.Web/register` 注册资源提供程序（未注册会报
+>    `MissingSubscriptionRegistration`），再 PUT `serverfarms`（`Y1`/`Dynamic`/`kind:linux`）
+>    和 `sites`（`linuxFxVersion: NODE|20`）。
+
 ## 三、拿到部署凭据
 
 1. 函数应用 → 左侧 **概述** → 顶部点 **获取发布配置文件**，会下载一个 `.PublishSettings` 文件。
 2. 打开这个文件，把**整个内容**复制下来（很长，是 XML）。
-3. 到 GitHub 仓库 → Settings → Secrets and variables → Actions → New repository secret，加两条：
+3. 到 GitHub 仓库 → Settings → Secrets and variables → Actions → New repository secret，加三条：
 
    | 名称 | 值 |
    |---|---|
    | `AZURE_FUNCTIONAPP_NAME` | 函数应用的名字，比如 `pill-danmaku` |
    | `AZURE_FUNCTIONAPP_PUBLISH_PROFILE` | 刚才复制的整个 XML |
+   | `AZURE_STORAGE_CONNECTION` | 第一步复制的连接字符串（大图分流脚本用） |
 
 > 发布配置文件等于部署密码。贴进 GitHub Secrets 是加密存储，
 > 不要贴进聊天、不要提交到仓库。
@@ -70,6 +88,11 @@
    ```
 
 4. 推上去，等 Pages 部署完成，文章页底部就会出现「说点什么」。
+
+> **手动部署**（不走 Actions 时）：在 `danmaku-api/` 下 `npm install`，
+> 把整个目录打成 zip，`POST` 到
+> `https://<app>.scm.azurewebsites.net/api/zipdeploy?isAsync=true`，
+> Basic 认证用发布配置文件里的 `userName` / `userPWD`。
 
 ### 验证
 
