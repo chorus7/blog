@@ -15,15 +15,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # 还没在 Azure 开通、没配 secret 时直接跳过，
+      # 避免每次改文章都留一个失败记录。
+      - name: 检查是否已配置 Azure
+        id: check
+        run: |
+          if [ -z "${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}" ]; then
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "尚未配置 AZURE_FUNCTIONAPP_PUBLISH_PROFILE，跳过部署"
+          else
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - uses: actions/setup-node@v4
+        if: steps.check.outputs.ready == 'true'
         with:
           node-version: "20"
 
       - name: 安装依赖
+        if: steps.check.outputs.ready == 'true'
         working-directory: danmaku-api
         run: npm ci --omit=dev || npm install --omit=dev
 
       - name: 部署到 Azure Functions
+        if: steps.check.outputs.ready == 'true'
         uses: Azure/functions-action@v1
         with:
           app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
