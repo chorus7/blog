@@ -3,7 +3,7 @@
 	<span class="footer-left">{{ now.Format "2006" }}© {{ .Site.Title }}</span>
 	{{- with .Site.Params.douyin }}
 	<span class="footer-sep">·</span>
-	<a class="footer-douyin" href="{{ . }}" target="_blank" rel="noopener noreferrer me">抖音{{ partial "icon.html" (dict "name" "arrow-up-right") }}</a>
+	<a class="footer-douyin" href="{{ . }}" target="_blank" rel="noopener noreferrer me">{{ partial "icon.html" (dict "name" "douyin") }}抖音</a>
 	{{- end }}
 	{{- with .Site.Params.startDate }}
 	{{- $start := time.AsTime . }}

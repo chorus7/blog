@@ -1394,21 +1394,28 @@ footer {
   margin: 0 0.15rem;
 }
 .footer-douyin {
-  color: var(--accent-on-paper);
-  border-bottom: 1px dashed transparent;
-}
-.footer-douyin {
   display: inline-flex;
   align-items: center;
-  gap: 0.15em;
+  gap: 0.3em;
+  padding: 0.15em 0.6em;
+  border: 1px solid color-mix(in srgb, var(--accent-on-paper) 45%, transparent);
+  border-radius: 999px;
+  color: var(--accent-on-paper);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 .footer-douyin svg {
-  width: 0.85em;
-  height: 0.85em;
+  width: 1.05em;
+  height: 1.05em;
+  flex: none;
+  /* 图标实心填充，与 lucide 的描边风格区分：这是品牌标志，不是线性图标 */
+  fill: currentColor;
 }
 .footer-douyin:hover {
-  color: var(--link-hover);
-  border-bottom-color: currentColor;
+  color: var(--accent-on-paper);
+  background: color-mix(in srgb, var(--accent-on-paper) 12%, transparent);
+  border-color: var(--accent-on-paper);
   text-decoration: none;
 }
 .footer-uptime {

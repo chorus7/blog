@@ -8,7 +8,7 @@ paginate = 10
 paginatePath = "page"
 
 [params]
-  author = "chorus7"
+  author = "Pill"
   description = "个人随记"
 
   # ===== 页脚 =====
