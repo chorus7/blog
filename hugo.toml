@@ -1,7 +1,7 @@
 locale = "zh-CN"
 # 站点配置 · 视觉照抄 juroku.net，内容为自己的
 baseURL = "https://chorus7.github.io/blog/"
-title = "All in"
+title = "Pill"
 
 # 一天可发多篇，slug 精确到分钟
 paginate = 10
