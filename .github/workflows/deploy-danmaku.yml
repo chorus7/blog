@@ -1,0 +1,33 @@
+name: 部署弹幕后端
+
+# 只在弹幕后端相关文件变动时跑，避免每次改文章都触发
+on:
+  push:
+    branches: [main]
+    paths:
+      - "danmaku-api/**"
+      - ".github/workflows/deploy-danmaku.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: 安装依赖
+        working-directory: danmaku-api
+        run: npm ci --omit=dev || npm install --omit=dev
+
+      - name: 部署到 Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ secrets.AZURE_FUNCTIONAPP_NAME }}
+          package: danmaku-api
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true

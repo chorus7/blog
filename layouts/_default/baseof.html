@@ -29,6 +29,8 @@
 	<link rel="alternate" type="application/rss+xml" href="{{ "index.xml" | relURL }}" title="{{ .Site.Title }}" />
 	{{- $css := resources.Get "css/main.css" | minify | fingerprint }}
 	<link rel="stylesheet" type="text/css" media="screen" href="{{ $css.RelPermalink }}" />
+	{{- $dancss := resources.Get "css/danmaku.css" | minify | fingerprint }}
+	<link rel="stylesheet" type="text/css" media="screen" href="{{ $dancss.RelPermalink }}" />
 </head>
 	<body>
 		<div class="spark-layer" aria-hidden="true"></div>

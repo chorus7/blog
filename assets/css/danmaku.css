@@ -1,0 +1,305 @@
+/* =========================================================
+   弹幕留言
+   飘屏层贴在正文卡片顶部，不遮挡文字：高度固定、pointer-events 只在弹幕本身。
+   颜色取现有令牌的强调色，不引入新色相。
+   ========================================================= */
+.danmaku {
+  margin: 2.4em 0 0;
+  border-top: 1px dashed var(--rule-dash);
+  padding-top: 1.6em;
+}
+
+.danmaku-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6em;
+  margin-bottom: 0.9em;
+}
+
+.danmaku-title {
+  font-family: var(--font-sans);
+  font-size: 0.95em;
+  font-weight: 600;
+  color: var(--heading);
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+
+.danmaku-count {
+  font-size: 0.78em;
+  color: var(--ink-muted);
+}
+
+/* ---------- 飘屏层 ---------- */
+.danmaku-stage {
+  position: relative;
+  height: 136px;
+  overflow: hidden;
+  background: var(--soft);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-card);
+  margin-bottom: 1em;
+}
+
+.danmaku-shot {
+  position: absolute;
+  left: 0;
+  white-space: nowrap;
+  font-size: 0.86em;
+  line-height: 1.2;
+  padding: 0.2em 0.7em;
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(150, 130, 130, 0.25);
+  will-change: transform;
+  /* 动画开始前先待在画面外，避免在左边缘闪一下 */
+  transform: translateX(var(--from, 100%));
+  animation: danmaku-move var(--dur, 10s) linear forwards;
+  pointer-events: auto;
+}
+
+@keyframes danmaku-move {
+  from { transform: translateX(var(--from, 100%)); }
+  to   { transform: translateX(var(--to, -100%)); }
+}
+
+/* 减少动态效果：不跑动画，静置 */
+@media (prefers-reduced-motion: reduce) {
+  .danmaku-shot {
+    animation: none;
+    position: static;
+    display: inline-block;
+    margin: 0 0.4em 0.4em 0;
+  }
+  .danmaku-stage {
+    height: auto;
+    padding: 0.7em;
+  }
+}
+
+/* 颜色变体：飘屏用底色，列表用小色点（见下方 .danmaku-text::before） */
+.danmaku-shot[data-color="pink"] { --tint: #f7e2e2; }
+.danmaku-shot[data-color="green"] { --tint: #e4ebe1; }
+.danmaku-shot[data-color="yellow"] { --tint: #f7f0d8; }
+.danmaku-shot[data-color="blue"] { --tint: #e0e8f0; }
+.danmaku-shot[data-color="purple"] { --tint: #ece2f0; }
+.danmaku-shot[data-color="orange"] { --tint: #f9e8dc; }
+
+.danmaku-item[data-color="pink"] .danmaku-text { --tint: #d9a9a9; }
+.danmaku-item[data-color="green"] .danmaku-text { --tint: #9fb69a; }
+.danmaku-item[data-color="yellow"] .danmaku-text { --tint: #cbbd7a; }
+.danmaku-item[data-color="blue"] .danmaku-text { --tint: #9db0c4; }
+.danmaku-item[data-color="purple"] .danmaku-text { --tint: #b4a2c0; }
+.danmaku-item[data-color="orange"] .danmaku-text { --tint: #d1a98c; }
+
+.danmaku-shot[data-color] { background: var(--tint, var(--card)); }
+
+:root[data-theme="dark"] .danmaku-shot[data-color="pink"] { --tint: #3a2a2c; }
+:root[data-theme="dark"] .danmaku-shot[data-color="green"] { --tint: #29322a; }
+:root[data-theme="dark"] .danmaku-shot[data-color="yellow"] { --tint: #37321f; }
+:root[data-theme="dark"] .danmaku-shot[data-color="blue"] { --tint: #26303a; }
+:root[data-theme="dark"] .danmaku-shot[data-color="purple"] { --tint: #322a3a; }
+:root[data-theme="dark"] .danmaku-shot[data-color="orange"] { --tint: #3a2e24; }
+
+:root[data-theme="dark"] .danmaku-item[data-color="pink"] .danmaku-text { --tint: #c98f8f; }
+:root[data-theme="dark"] .danmaku-item[data-color="green"] .danmaku-text { --tint: #8ba886; }
+:root[data-theme="dark"] .danmaku-item[data-color="yellow"] .danmaku-text { --tint: #c0b070; }
+:root[data-theme="dark"] .danmaku-item[data-color="blue"] .danmaku-text { --tint: #8ba3bb; }
+:root[data-theme="dark"] .danmaku-item[data-color="purple"] .danmaku-text { --tint: #a892b8; }
+:root[data-theme="dark"] .danmaku-item[data-color="orange"] .danmaku-text { --tint: #c49a7c; }
+
+/* ---------- 输入 ---------- */
+.danmaku-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+}
+
+.danmaku-row {
+  display: flex;
+  gap: 0.5em;
+  align-items: flex-start;
+}
+
+.danmaku-input {
+  flex: 1;
+  min-width: 0;
+  font: inherit;
+  font-size: 0.9em;
+  color: var(--ink);
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 0.6em;
+  padding: 0.6em 0.8em;
+  resize: vertical;
+  min-height: 2.8em;
+  max-height: 8em;
+}
+
+.danmaku-input:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+  border-color: var(--focus);
+}
+
+.danmaku-input::placeholder { color: var(--ink-muted); opacity: 0.8; }
+
+.danmaku-send {
+  font: inherit;
+  font-size: 0.86em;
+  font-weight: 600;
+  /* 用固定深绿底 + 白字：--heading 在深色主题里是浅色，直接用会变成浅底浅字 */
+  color: #fbf8f6;
+  background: #4e5b4a;
+  border: 1px solid #4e5b4a;
+  border-radius: 0.6em;
+  padding: 0.6em 1.1em;
+  cursor: pointer;
+  transition: background-color 160ms var(--ease-out), border-color 160ms var(--ease-out);
+}
+
+/* 只换颜色，不做位移 */
+.danmaku-send:hover { background: #3f4a3c; border-color: #3f4a3c; }
+.danmaku-send:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.danmaku-send:disabled { opacity: 0.55; cursor: default; }
+.danmaku-send:disabled:hover { background: #4e5b4a; border-color: #4e5b4a; }
+
+/* 深色下把底色提亮一档，避免按钮陷进背景 */
+:root[data-theme="dark"] .danmaku-send {
+  color: #1b1618;
+  background: #b9c7b3;
+  border-color: #b9c7b3;
+}
+:root[data-theme="dark"] .danmaku-send:hover { background: #d0dcc9; border-color: #d0dcc9; }
+:root[data-theme="dark"] .danmaku-send:disabled:hover { background: #b9c7b3; border-color: #b9c7b3; }
+
+/* ---------- 颜色选择 ---------- */
+.danmaku-colors {
+  display: flex;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.danmaku-swatch {
+  width: 1.5em;
+  height: 1.5em;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--rule);
+  background: var(--tint, var(--card));
+  cursor: pointer;
+}
+
+.danmaku-swatch[aria-pressed="true"] {
+  border-color: var(--heading);
+  box-shadow: 0 0 0 2px var(--paper), 0 0 0 3px var(--heading);
+}
+
+.danmaku-swatch:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+.danmaku-swatch[data-danmaku-color=""] { background: var(--card); }
+.danmaku-swatch[data-danmaku-color="pink"] { --tint: #f7e2e2; }
+.danmaku-swatch[data-danmaku-color="green"] { --tint: #e4ebe1; }
+.danmaku-swatch[data-danmaku-color="yellow"] { --tint: #f7f0d8; }
+.danmaku-swatch[data-danmaku-color="blue"] { --tint: #e0e8f0; }
+.danmaku-swatch[data-danmaku-color="purple"] { --tint: #ece2f0; }
+.danmaku-swatch[data-danmaku-color="orange"] { --tint: #f9e8dc; }
+
+:root[data-theme="dark"] .danmaku-swatch[data-danmaku-color="pink"] { --tint: #3a2a2c; }
+:root[data-theme="dark"] .danmaku-swatch[data-danmaku-color="green"] { --tint: #29322a; }
+:root[data-theme="dark"] .danmaku-swatch[data-danmaku-color="yellow"] { --tint: #37321f; }
+:root[data-theme="dark"] .danmaku-swatch[data-danmaku-color="blue"] { --tint: #26303a; }
+:root[data-theme="dark"] .danmaku-swatch[data-danmaku-color="purple"] { --tint: #322a3a; }
+:root[data-theme="dark"] .danmaku-swatch[data-danmaku-color="orange"] { --tint: #3a2e24; }
+
+/* ---------- 状态 ---------- */
+.danmaku-status {
+  font-size: 0.78em;
+  color: var(--ink-muted);
+  min-height: 1.4em;
+}
+
+.danmaku-status[data-kind="ok"] { color: var(--link); }
+.danmaku-status[data-kind="err"] { color: var(--accent-on-paper); }
+
+/* ---------- 列表 ---------- */
+.danmaku-list {
+  list-style: none;
+  margin: 1.2em 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55em;
+  max-height: 20em;
+  overflow-y: auto;
+}
+
+/* 站点全局给 ul > li 加了 "*" 项目符号，弹幕列表不需要 */
+.danmaku-list > li::before {
+  content: none;
+  display: none;
+}
+
+.danmaku-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-start;
+  gap: 0.8em;
+  font-size: 0.86em;
+  padding: 0.35em 0;
+  border-bottom: 1px dotted var(--rule-dash);
+  list-style: none;
+  text-indent: 0;
+}
+
+.danmaku-item:last-child { border-bottom: 0; }
+
+.danmaku-item .danmaku-text {
+  color: var(--ink);
+  padding: 0.1em 0;
+  word-break: break-word;
+}
+
+/* 列表里用小色点表示颜色，不用整块底色 —— 长句换行时色块会被拉成整条 */
+.danmaku-item .danmaku-text::before {
+  content: "";
+  display: inline-block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 50%;
+  margin-right: 0.45em;
+  vertical-align: 0.08em;
+  background: var(--tint, var(--accent-soft));
+}
+
+.danmaku-meta {
+  flex: none;
+  margin-left: auto;
+  font-size: 0.85em;
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.danmaku-empty {
+  font-size: 0.86em;
+  color: var(--ink-muted);
+  padding: 0.6em 0;
+}
+
+/* ---------- 窄屏 ---------- */
+@media (max-width: 600px) {
+  .danmaku-stage { height: 108px; }
+  .danmaku-shot { font-size: 0.8em; }
+  .danmaku-row { flex-direction: column; }
+  .danmaku-send { width: 100%; }
+  /* 窄屏仍保持一行：文字可换行，时间靠右不换行 */
+  .danmaku-item { align-items: flex-start; gap: 0.5em; }
+  /* 不用 flex:1，否则色块被撑成整条；用 margin-right:auto 把时间推右 */
+  .danmaku-item .danmaku-text { min-width: 0; margin-right: auto; }
+  .danmaku-meta { margin-left: auto; font-size: 0.8em; }
+}
+
+@media print {
+  .danmaku { display: none !important; }
+}

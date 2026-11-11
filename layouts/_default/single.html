@@ -42,6 +42,9 @@
 				<section class="body">
 					{{ .Content }}
 				</section>
+				{{- if eq .Section "posts" }}
+				{{ partial "danmaku.html" . }}
+				{{- end }}
 				<div class="postnav">
 					{{- with .PrevInSection }}
 					<span class="prev_post"><a class="prev" href="{{ .RelPermalink }}">{{ partial "icon.html" (dict "name" "arrow-left") }}{{ .Title }}</a></span>

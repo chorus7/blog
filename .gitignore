@@ -5,6 +5,11 @@ resources/
 # Python 缓存
 __pycache__/
 
+# 弹幕后端依赖
+danmaku-api/node_modules/
+danmaku-api/.funcignore
+danmaku-api/local.settings.json
+
 # Obsidian：保留配置（多端一致），排除工作区状态与缓存
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json

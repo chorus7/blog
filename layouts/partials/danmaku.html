@@ -1,0 +1,53 @@
+{{- /*
+  弹幕留言
+  无登录，匿名发。后端地址由 hugo.toml 的 params.danmakuApi 提供，
+  没配置就整块不渲染 —— 避免上线后出现一个点了没反应的框。
+*/ -}}
+{{- $api := .Site.Params.danmakuApi -}}
+{{- if $api }}
+<section class="danmaku" data-danmaku aria-labelledby="danmaku-title">
+	<div class="danmaku-head">
+		<h2 class="danmaku-title" id="danmaku-title">说点什么</h2>
+		<span class="danmaku-count" data-danmaku-count aria-live="polite"></span>
+	</div>
+
+	<div class="danmaku-stage" data-danmaku-stage aria-hidden="true"></div>
+
+	<form class="danmaku-form" data-danmaku-form novalidate>
+		<div class="danmaku-row">
+			<label class="sr-only" for="danmaku-input">留言内容，最多 80 字</label>
+			<textarea
+				class="danmaku-input"
+				id="danmaku-input"
+				data-danmaku-input
+				name="text"
+				rows="2"
+				maxlength="80"
+				placeholder="匿名说一句，最多 80 字。⌘/Ctrl + Enter 发送"
+			></textarea>
+			<button class="danmaku-send" type="submit" data-danmaku-submit>发出</button>
+		</div>
+
+		<div class="danmaku-row">
+			<div class="danmaku-colors" role="group" aria-label="弹幕颜色">
+				<button class="danmaku-swatch" type="button" data-danmaku-color="" aria-pressed="true" aria-label="默认颜色"></button>
+				<button class="danmaku-swatch" type="button" data-danmaku-color="pink" aria-pressed="false" aria-label="粉色"></button>
+				<button class="danmaku-swatch" type="button" data-danmaku-color="green" aria-pressed="false" aria-label="绿色"></button>
+				<button class="danmaku-swatch" type="button" data-danmaku-color="yellow" aria-pressed="false" aria-label="黄色"></button>
+				<button class="danmaku-swatch" type="button" data-danmaku-color="blue" aria-pressed="false" aria-label="蓝色"></button>
+				<button class="danmaku-swatch" type="button" data-danmaku-color="purple" aria-pressed="false" aria-label="紫色"></button>
+				<button class="danmaku-swatch" type="button" data-danmaku-color="orange" aria-pressed="false" aria-label="橙色"></button>
+			</div>
+			<span class="danmaku-status" data-danmaku-status role="status" aria-live="polite"></span>
+		</div>
+	</form>
+
+	<ul class="danmaku-list" data-danmaku-list aria-label="留言列表"></ul>
+</section>
+
+{{- $dm := resources.Get "js/danmaku.js" | minify | fingerprint }}
+<script>
+	window.DANMAKU_API = {{ $api }};
+</script>
+<script src="{{ $dm.RelPermalink }}" defer></script>
+{{- end }}

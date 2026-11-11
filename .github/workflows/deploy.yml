@@ -41,6 +41,26 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 大图分流：超过阈值的图片上传到 Azure Blob，正文引用改成 Blob 地址。
+      # 没配 secret 时脚本会跳过（不是失败），仓库照样能构建。
+      - name: Offload large images
+        env:
+          AZURE_STORAGE_CONNECTION: ${{ secrets.AZURE_STORAGE_CONNECTION }}
+          AZURE_BLOB_CONTAINER: ${{ vars.AZURE_BLOB_CONTAINER || 'images' }}
+          AZURE_BLOB_BASE: ${{ vars.AZURE_BLOB_BASE }}
+          IMAGE_OFFLOAD_KB: ${{ vars.IMAGE_OFFLOAD_KB || '300' }}
+        run: |
+          if [ -z "$AZURE_STORAGE_CONNECTION" ] || [ -z "$AZURE_BLOB_BASE" ]; then
+            echo "未配置 Azure 存储，跳过大图分流"
+          else
+            node scripts/offload-images.mjs --write
+          fi
+
       - name: Build with Hugo
         run: |
           hugo \

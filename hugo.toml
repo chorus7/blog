@@ -17,6 +17,12 @@ paginatePath = "page"
   # 抖音主页，填完整链接；留空则页脚不显示抖音入口
   douyin = "https://www.douyin.com/user/MS4wLjABAAAAmTEMeML1Ez8WpGaeHEaCzGn0fpm6dRigVD1iM8j1Z1Y"
 
+  # ===== 弹幕留言 =====
+  # Azure Functions 的接口根地址，末尾不带斜杠。
+  # 留空则整块不渲染 —— 函数应用还没开通前，线上不会出现点了没反应的框。
+  # 形如：https://pill-danmaku.azurewebsites.net/api
+  danmakuApi = ""
+
   # ===== 浏览器标签标题 =====
   # 首页标题
   titleHome = "二〇二六 | 个人博客"
