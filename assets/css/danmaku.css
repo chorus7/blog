@@ -64,13 +64,19 @@
   to   { transform: translateX(var(--to, -100%)); }
 }
 
-/* 减少动态效果：不跑动画，静置 */
+/* 减少动态效果：不跑动画，静置平铺 */
 @media (prefers-reduced-motion: reduce) {
   .danmaku-shot {
     animation: none;
     position: static;
     display: inline-block;
     margin: 0 0.4em 0.4em 0;
+    /* 动画用的 translateX(100%) 位移必须清掉，否则静态平铺时整条被推出可视区 */
+    transform: none;
+    /* 静态模式是平铺换行，不能再 nowrap —— 长句会被 overflow:hidden 切掉 */
+    white-space: normal;
+    max-width: 100%;
+    overflow-wrap: anywhere;
   }
   .danmaku-stage {
     height: auto;
@@ -291,7 +297,8 @@
 @media (max-width: 600px) {
   .danmaku-stage { height: 108px; }
   .danmaku-shot { font-size: 0.8em; }
-  .danmaku-row { flex-direction: column; }
+  /* 纵向堆叠后交叉轴是水平方向，必须 stretch，否则 textarea 退回默认宽度、比按钮窄一截 */
+  .danmaku-row { flex-direction: column; align-items: stretch; }
   .danmaku-send { width: 100%; }
   /* 窄屏仍保持一行：文字可换行，时间靠右不换行 */
   .danmaku-item { align-items: flex-start; gap: 0.5em; }
