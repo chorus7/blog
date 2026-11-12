@@ -16,10 +16,13 @@ backend:
 # 站点发布地址，后台预览用
 site_url: https://chorus7.github.io/blog/
 display_url: https://chorus7.github.io/blog/
-logo_url: https://chorus7.github.io/blog/img/favicon.png
 
-# 界面语言
-locale: zh_Hans
+# 站点 logo。Sveltia 已弃用顶层的 logo_url，改用 logo.src。
+logo:
+  src: https://chorus7.github.io/blog/img/favicon.png
+
+# 界面语言不在这里设：Sveltia 没有全局 locale 选项，
+# 会自动跟随浏览器语言（中文浏览器就是中文界面）。
 
 # ============================================================
 # 媒体：默认走仓库内（page bundle 同目录），大图另走 Azure Blob
@@ -33,9 +36,9 @@ media_libraries:
   # 首次使用时会弹窗让你粘贴，只存在浏览器里。
   azure_blob_storage:
     label: Azure（大图）
-    account_name: ""          # 待你开通后填
-    container: media
-    public_url: ""            # 待你开通后填
+    account_name: pan0020
+    container: images
+    public_url: https://pan0020.blob.core.windows.net/images
     prefix: blog/
 
   default:
@@ -72,12 +75,12 @@ collections:
     # 目录名 = 日期 + 短名（如 20261111-hello），Hugo 直接用目录名生成地址，
     # 不写 slug front matter，省掉「目录名/字段值」两处同步的麻烦。
     # 不按标题自动生成：中文标题会原样进 URL（踩过）。
+    # 注意：Sveltia 不认 slug.encoding，删掉以免每次加载都刷警告。
     slug:
       template: "{{year}}{{month}}{{day}}-{{fields.slugname}}"
-      encoding: ascii
     summary: "{{title}} · {{date}}"
-    sort_by: date
-    sort_direction: desc
+    # Sveltia 不认 sort_by / sort_direction（按 date 倒序是它的默认行为），
+    # 写了只会刷两条警告，故不写。
     # 预览地址：Hugo 用目录名生成地址，所以直接用 slug（已是完整 20261111-hello）
     preview_path: "posts/{{slug}}/"
     fields:

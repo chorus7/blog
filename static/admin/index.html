@@ -27,6 +27,45 @@
 </div>
 <noscript>后台需要 JavaScript，请开启后重试。</noscript>
 
+<!-- 兼容垫片：Sveltia 2026 版启动前会检测三项 2025 新特性，
+     缺任意一项就直接渲染「Your browser is not supported」整页白屏。
+     实际需要的是 Uint8Array 的 toHex / toBase64 / fromBase64，
+     其中 toHex 要到 Chrome 133、Safari 17.4、Firefox 133 才有 ——
+     仍在服役的 Chrome 130、iOS 16 都会中招（实测 Chrome 130 复现）。
+     这里补最小实现，语义与规范一致，不影响新版浏览器（已存在就跳过）。 -->
+<script>
+(function () {
+  var u8 = Uint8Array.prototype;
+  if (typeof u8.toHex !== 'function') {
+    u8.toHex = function () {
+      var s = '';
+      for (var i = 0; i < this.length; i++) s += this[i].toString(16).padStart(2, '0');
+      return s;
+    };
+  }
+  if (typeof u8.toBase64 !== 'function') {
+    u8.toBase64 = function (opts) {
+      opts = opts || {};
+      var bin = '';
+      for (var i = 0; i < this.length; i++) bin += String.fromCharCode(this[i]);
+      var s = btoa(bin);
+      if (opts.alphabet === 'base64url') s = s.replace(/\+/g, '-').replace(/\//g, '_');
+      if (opts.omitPadding) s = s.replace(/=+$/, '');
+      return s;
+    };
+  }
+  if (typeof Uint8Array.fromBase64 !== 'function') {
+    Uint8Array.fromBase64 = function (str) {
+      var s = String(str).replace(/-/g, '+').replace(/_/g, '/');
+      while (s.length % 4) s += '=';
+      var bin = atob(s), out = new Uint8Array(bin.length);
+      for (var i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+      return out;
+    };
+  }
+})();
+</script>
+
 <!-- Sveltia 已内置在仓库内（static/admin/dist/），不走 CDN：
      jsdelivr 在国内直连不通，unpkg 拉 2.5MB 要 20 秒，
      本地化后首屏和 chunk 都从本站取。 -->
