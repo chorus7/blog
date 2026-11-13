@@ -1,16 +1,12 @@
 ---
 title: 小心思
-date: 2028-09-08T00:00:00+08:00
+date: 2026-11-13T08:04:00+08:00
 slugname: ''
 draft: false
-categories:
-  - Secret
-tags:
-  - 🫥
+categories: []
+tags: []
 ---
 
 **_~~这该留下点什么~~_**
 
 萍水相​逢.
-
-![](/blog/img/uploads/想当年.webp)
